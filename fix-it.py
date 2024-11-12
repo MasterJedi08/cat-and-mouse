@@ -3,6 +3,9 @@
 import subprocess as sp
 import os
 
+# need to run this so it can use x11 & actually run xinput properly
+# os.system("export DISPLAY=:0.0")
+os.environ["DISPLAY"] = ":0.0"
 # getting mouse devices
 output = sp.run("xinput list", capture_output=True, text=True, shell=True)
 #print("output: ", output)
