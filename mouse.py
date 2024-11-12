@@ -101,7 +101,10 @@ else:
     except Exception as e:
         print(f"Error: {e}")
 
+# ----------------------------
+# TESTING PURPOSES ONLY
 # !!!! HAVE THIS SECTION UNCOMMENTED DURING TESTING !!!!
+# ----------------------------
 
 # testing purposes only -- will sleep fo 10 seconds then repair the damage by enabling all drivers again
 # time.sleep(10)
